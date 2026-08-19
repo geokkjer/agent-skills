@@ -15,46 +15,56 @@ models:
         and weak models appears in execution accuracy and self-repair.
         Recommended for multi-file, repository-level tasks with complex
         dependency chains.
-    - name: Claude Opus 4.5/4.7 + Claude Code CLI
-      score: "58% — second Terminal-Bench, strong LiveCodeBench self-repair"
+    - name: Claude Opus 4.5 + Terminus 2
+      score: "58% — second Terminal-Bench"
       rationale: >
-        Excels at code understanding, self-repair, and test output
-        prediction. Preferred for debugging tasks and code review
-        where reading comprehension dominates over generation.
+        Second-highest Terminal-Bench resolution rate. With the Claude Code
+        CLI it resolves 52% — still solid — but Terminus 2 is the stronger
+        scaffold for Opus 4.5. Strong at code understanding and test-output
+        prediction; preferred for debugging and code review.
     - name: Gemini 3 Pro + Terminus 2
-      score: "57% — third Terminal-Bench, competitive across scenarios"
+      score: "57% — third Terminal-Bench"
       rationale: >
-        Strong across all LiveCodeBench scenarios. Good choice when the
-        model needs broad capability coverage rather than specialist depth.
+        Third-highest Terminal-Bench resolution rate with broad capability
+        coverage. Good choice when the model needs breadth rather than
+        specialist depth.
   secondary:
-    - name: GPT-5.1 + Codex CLI
-      score: "Terminal-Bench: competitive; LiveCodeBench: strong code generation"
+    - name: Claude Opus 4.5 + Claude Code CLI
+      score: "Terminal-Bench: 52%"
       rationale: >
-        Solid cost-performance tradeoff. Not as strong as 5.2 on
-        complex multi-step tasks but sufficient for most workflows.
-    - name: Claude Sonnet 4.6 + Claude Code CLI
-      score: "Terminal-Bench: moderate; LiveCodeBench: good self-repair"
-      rationale: >
-        Fast and cost-effective. Best for quick edits, simple fixes,
-        and tasks where latency matters more than max capability.
-    - name: DeepSeek V4 Pro + Terminus 2
+        Solid, but Terminus 2 is the stronger scaffold for Opus 4.5 (58%).
+        Claude Code remains a good choice when you want the same model
+        family with first-party tooling.
+    - name: Kimi K2 Thinking + Terminus 2
       score: "Terminal-Bench: ~36% (best open-weight)"
       rationale: >
-        Top open-weight option. Use when API access to proprietary
-        models is not available or when cost is a primary concern.
-    - name: Qwen Coder + Terminus 2
+        Best open-weight configuration in the paper. Use when API access
+        to proprietary models is not available or when cost is a primary
+        concern.
+    - name: GPT-5.1 + Codex CLI
+      score: "not benchmarked in the cited papers"
+      rationale: >
+        Expected good cost-performance within the 5.x family, but not
+        evaluated by Terminal-Bench, LiveCodeBench, or SWE-bench.
+    - name: Claude Sonnet 4.6 + Claude Code CLI
+      score: "not benchmarked in the cited papers"
+      rationale: >
+        Fast, cost-effective option; no benchmark support in the cited
+        papers.
+    - name: Qwen 3 Coder 480B + Terminus 2
       score: "Terminal-Bench: moderate; more balanced failure pattern"
       rationale: >
-        Has more balanced failure distribution than proprietary models
+        Has a more balanced failure distribution than proprietary models
         — higher coherence and verification failures. Needs stronger
         system-prompt guardrails for verification steps.
   specialization_note: >
-    LiveCodeBench shows model rankings shift across sub-tasks (code
-    generation vs. self-repair vs. execution prediction). No single
-    model dominates every coding scenario. Claude excels at self-repair
-    and comprehension; GPT excels at generation and execution.
-    Terminal-Bench shows model choice matters more than scaffold choice
-    (+52% vs +17% improvement from upgrading).
+    LiveCodeBench (2024) shows model rankings shift across sub-tasks
+    (code generation vs. self-repair vs. execution prediction), though
+    GPT-4-Turbo and Claude-3-Opus rank at the top across all scenarios.
+    GPT-4-Turbo leads code generation and self-repair; Claude-3-Opus leads
+    code-execution and test-output prediction. Terminal-Bench shows model
+    choice matters more than scaffold choice (+52 vs +17 percentage
+    points).
   scores_source: "Terminal-Bench 2.0 (89 tasks), LiveCodeBench (511 problems, 4 scenarios), SWE-bench (2,294 issues)"
 ---
 

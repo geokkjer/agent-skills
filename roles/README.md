@@ -7,7 +7,7 @@ System prompts paired with model recommendations for specific research tasks.
 | Role | File | Recommended Models |
 |---|---|---|
 | Deep Research Analyst | [deep-research-analyst.md](deep-research-analyst.md) | GPT-5.5, Claude Opus 4.7 |
-| Programmer | [programmer.md](programmer.md) | GPT-5.2 + Codex CLI, Claude Opus 4.5 + Claude Code |
+| Programmer | [programmer.md](programmer.md) | GPT-5.2 + Codex CLI, Claude Opus 4.5 (Terminus 2 or Claude Code) |
 
 ## Model Selection Guide
 
@@ -22,6 +22,10 @@ on 100 deep research tasks (6,400 independently scored cells):
 |---|---|---|---|---|---|
 | **GPT-5.5** | **33.37%** | 37.84% | **32.55%** | **34.16%** | **32.38%** |
 | **Claude Opus 4.7** | **31.84%** | **36.52%** | 30.97% | 31.14% | **31.59%** |
+
+Note: the paper's top configuration is **Codex CLI + GPT-5.5** (GPT-5.5
+accessed through the Codex CLI harness); bare GPT-5.5 appears only as the
+automated rubric grader there.
 
 **Recommendation:** For deep research tasks, prefer **GPT-5.5** when the task is
 derivation-heavy (multi-step composition, extrapolation). Prefer **Claude Opus 4.7**
@@ -50,30 +54,34 @@ Based on Terminal-Bench, LiveCodeBench, and SWE-bench:
 
 #### Tier 1 — Best for Agentic Programming
 
-| Model + Scaffold | Terminal-Bench | LiveCodeBench strength | Best for |
+| Model + Scaffold | Terminal-Bench | Notes | Best for |
 |---|---|---|---|
-| **GPT-5.2 + Codex CLI** | **63%** | Best code generation | Repository-level tasks, complex multi-step |
-| **Claude Opus 4.5 + Claude Code** | **58%** | Best self-repair & comprehension | Debugging, code review, understanding |
+| **GPT-5.2 + Codex CLI** | **63%** | Top overall; leads code generation | Repository-level tasks, complex multi-step |
+| **Claude Opus 4.5 + Terminus 2** | **58%** | Strong comprehension; good for debugging & review | Debugging, code review, understanding |
 | **Gemini 3 Pro + Terminus 2** | **57%** | Broad capability coverage | General tasks needing wide skillset |
+
+Claude Opus 4.5 + Claude Code resolves 52% on Terminal-Bench — solid, but
+Terminus 2 is the stronger scaffold for Opus 4.5.
 
 #### Tier 2 — Solid Performers
 
 | Model + Scaffold | Notes |
 |---|---|
-| GPT-5.1 + Codex CLI | Good cost-performance tradeoff |
-| Claude Sonnet 4.6 + Claude Code | Fast, cost-effective, good self-repair |
-| DeepSeek V4 Pro + Terminus 2 | Best open-weight (~36%), good generation |
+| Claude Opus 4.5 + Claude Code | 52% on Terminal-Bench — solid; Terminus 2 is the stronger scaffold for Opus 4.5 |
+| Kimi K2 Thinking + Terminus 2 | ~36% — best open-weight configuration in the paper |
+| GPT-5.1 + Codex CLI | Not benchmarked in the cited papers; expected good cost-performance within the 5.x family |
+| Claude Sonnet 4.6 + Claude Code | Not benchmarked in the cited papers; fast, cost-effective option |
 
 #### Key Insight: Sub-Task Specialization
 
-LiveCodeBench found model rankings shift across coding sub-tasks:
-- **Code generation:** GPT models lead
-- **Self-repair (debugging):** Claude models lead
-- **Code execution prediction:** Claude Opus, Mistral-L excel
-- **Test output prediction:** Claude Opus surpasses GPT-4
+LiveCodeBench (2024) found model rankings shift across coding sub-tasks:
+- **Code generation:** GPT-4-Turbo leads
+- **Self-repair (debugging):** GPT-4-Turbo leads
+- **Code execution prediction:** Claude-3-Opus and Mistral-L excel
+- **Test output prediction:** Claude-3-Opus surpasses GPT-4-Turbo
 
 Terminal-Bench also found that **model choice matters more than scaffold**
-(+52% improvement from model upgrade vs. +17% from scaffold change).
+(+52 percentage points from a model upgrade vs. +17 from a scaffold change).
 
 #### Key Insight: Domain Specialization
 
@@ -87,6 +95,11 @@ points. A model strong in one domain can rank near-bottom in another.
   non-standardized disclosures, heavy reconciliation required
 - **Easiest domains** (cross-model avg 70-83%): luxury goods, consumer
   electronics — abundant T1 filings, uniform reporting standards
+
+Note: the 14-20% / 70-83% figures are per-case (single-task) cross-model
+averages. Across the paper's six domain categories the spread is much
+tighter: Energy & Materials is hardest (24.6%) and Healthcare easiest
+(30.7%).
 
 **For critical research:** consider ensemble (run with top-2 models, flag answers
 that disagree) or domain-specific model selection.

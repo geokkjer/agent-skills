@@ -213,13 +213,15 @@ Works with alists, hash-tables, and plists through a uniform interface.
   (book-title b))  ;; => "The Hobbit"
 
 ;; Copy with modifications — immutable update
-(cl-copy-book b :title "The Silmarillion")  ;; new instance, original untouched
+(let ((b2 (copy-book b)))         ;; shallow copy; original untouched
+  (setf (book-title b2) "The Silmarillion")
+  b2)                             ;; new instance, original unchanged
 
-;; Also works with alists via type conversion
-(setf (book-tags b) '(fantasy adventure))  ;; mutates! use for performance-critical paths only
+;; Mutating in place — allowed, but prefer the copy above
+(setf (book-tags b) '(fantasy adventure))  ;; use only on performance-critical paths
 ```
 
-**Prefer `cl-copy-*` over destructive `setf`** for the same reason you prefer `let` over `setq` — referential transparency.
+**Prefer copying (or `copy-book` + `setf` on the copy) over destructive `setf` on the original** for the same reason you prefer `let` over `setq` — referential transparency.
 
 ### Emacs 30 Idiom: Alists as Immutable Maps
 
@@ -232,7 +234,7 @@ Alists (association lists) are the simplest functional map in Elisp. They're imm
         (cl-remove key settings :key #'car :test #'equal)))
 
 ;; Usage
-(defparameter *config* '((theme . dark) (font-size . 14)))
+(defvar *config* '((theme . dark) (font-size . 14)))  ;; defvar, not defparameter — Elisp has no defparameter
 (setf *config* (set-setting *config* 'theme 'light))
 ;; => ((theme . light) (font-size . 14))
 ```
@@ -405,7 +407,7 @@ Use `ERT` (Emacs Lisp Regression Testing), built-in since Emacs 24.
 | `map-elt` / `map-keys` | `assoc` / `alist-get` without default |
 | `cl-defstruct` with accessors | Manual plists with `plist-get` |
 | `cl-flet` / `cl-labels` for local fns | `flet` (deprecated) |
-| `cl-copy-*` for immutable updates | `setf` on everything |
+| Copy-then-`setf` for immutable updates | `setf` on the original |
 | `use-package` declarative config | Imperative `(require ...)` + `(setq ...)` |
 
 *The best Elisp reads like a dataflow diagram. Each function takes input, transforms it, passes it forward. Side-effects are the exception, not the rule. Code this way and Emacs will reward you with composable, debuggable, and dare we say, beautiful programs.*

@@ -8,12 +8,14 @@ description: >
 type: system-prompt
 models:
   primary:
-    - name: GPT-5.5 (via Codex CLI or API)
+    - name: Codex CLI + GPT-5.5
       score: "33.37% — top overall, best at Derivation & Calibration"
       rationale: >
-        Leads all capability families except Retrieval. Incomplete derivation rate
-        is lowest among evaluated models. Strongest choice for tasks heavy on
-        multi-step composition and quantitative extrapolation.
+        The paper's top configuration is GPT-5.5 accessed through the Codex CLI
+        harness (bare GPT-5.5 serves only as the automated rubric grader there).
+        Leads all capability families except Retrieval; lowest
+        incomplete-derivation rate among evaluated models. Strongest choice for
+        tasks heavy on multi-step composition and quantitative extrapolation.
     - name: Claude Opus 4.7 (via Claude Code CLI or API)
       score: "31.84% — second overall, best at Retrieval & Reasoning"
       rationale: >

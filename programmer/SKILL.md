@@ -4,16 +4,10 @@ description: Guide for agentic programming with terminal agents — command vali
 license: MIT
 metadata:
   source: https://github.com/geokkjer/agent-skills
-  papers:
-    - id: "2601.11868"
-      title: "Terminal-Bench: Benchmarking Agents on Hard, Realistic Tasks in Command Line Interfaces"
-      url: https://arxiv.org/abs/2601.11868
-    - id: "2403.07974"
-      title: "LiveCodeBench: Holistic and Contamination Free Evaluation of Large Language Models for Code"
-      url: https://arxiv.org/abs/2403.07974
-    - id: "2310.06770"
-      title: "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?"
-      url: https://arxiv.org/abs/2310.06770
+  papers: >
+    Terminal-Bench (arXiv:2601.11868, https://arxiv.org/abs/2601.11868);
+    LiveCodeBench (arXiv:2403.07974, https://arxiv.org/abs/2403.07974);
+    SWE-bench (arXiv:2310.06770, https://arxiv.org/abs/2310.06770)
 ---
 
 # Programmer Skill
@@ -23,16 +17,32 @@ recover from failures, and pick the right tool for the job. This skill is
 grounded in findings from Terminal-Bench (Merrill et al., 2026),
 LiveCodeBench (Jain et al., 2024), and SWE-bench (Jimenez et al., 2024).
 
+This skill also embodies three virtues:
+
+**Laziness:** Never do work that doesn't need doing. Before acting, ask: is this the minimum effort that solves the problem? Prefer the simplest solution. Avoid over-engineering. If something already exists and works, use it — don't rebuild it. Document your reasoning so you don't have to explain yourself twice.
+
+**Impatience:** Respect the user's time above all. Respond with what they need, not everything you know. Anticipate what they'll ask next and address it now. If a task can be done in parallel, do it in parallel. If a shorter answer suffices, give the shorter answer. Never make the user wait for information they didn't ask for.
+
+**Hubris:** Take responsibility for quality. Every output you produce should be correct, tested, and something you'd stand behind. If you're unsure, say so — silence about uncertainty is worse than admitting it. Don't produce code you wouldn't want your name on. When you make a mistake, fix it thoroughly, not patch it minimally.
+
+When these virtues conflict:
+- Laziness says "do less" — Hubris says "do it right". Choose right.
+- Impatience says "be fast" — Hubris says "be correct". Choose correct.
+- Laziness says "skip it" — Impatience says "they need this now". Choose action.
+
+The hierarchy is: correctness first, speed second, brevity third.
+
 ## The Evidence Base
 
 Across three major coding benchmarks evaluating dozens of frontier models:
 
-### Terminal-Bench (89 hard terminal tasks, many models)
+### Terminal-Bench 2.0 (89 hard terminal tasks, 21 models)
 
 1. **Command failures are not random — they're systematic.** Calling executables
    that aren't installed or not in PATH accounts for 24.1% of all command
    failures. Failures when running executables add another 9.6%. Together,
-   environment mismatch is the #1 failure.
+   environment mismatch is the #1 failure (both figures measured on Terminus 2
+   trajectories).
 
 2. **Strong and weak models fail differently.** Frontier models' errors
    are dominated by execution mistakes. Weaker models show a more balanced
@@ -40,27 +50,31 @@ Across three major coding benchmarks evaluating dozens of frontier models:
    (not checking their work).
 
 3. **Model selection matters more than agent scaffold.** Upgrading from
-   GPT-5-Nano to GPT-5.2 with the same scaffold yielded +52% improvement;
-   switching scaffolds with the same model yielded only +17%.
+   GPT-5-Nano to GPT-5.2 with the same scaffold improved resolution by
+   +52 percentage points; switching scaffolds with the same model yielded
+   only +17 points (Gemini-2.5-Pro, OpenHands → Terminus 2).
 
 4. **More turns ≠ better results.** No correlation between turn count,
    token count, and task success. Efficiency matters more than volume.
 
-5. **State-of-the-art is 63%.** The best model (Codex CLI + GPT-5.2)
-   resolves 63% of tasks. Open-weight models resolve ~36%.
+5. **State-of-the-art is 63%.** The best configuration (Codex CLI + GPT-5.2)
+   resolves 63% of tasks (leaderboard computed over 74 of the 89 tasks).
+   The best open-weight model (Kimi K2 Thinking + Terminus 2) resolves ~36%.
 
 ### LiveCodeBench (511 programming problems, 52 models)
 
 6. **Contamination is real.** Models show sharp performance drops on
-   problems released after their training cutoff (up to 8% drops).
+   problems released after their training cutoff (e.g., DeepSeek-33B drops
+   from ~60% to ~0% Pass@1 on post-cutoff LeetCode problems).
 
 7. **Models overfit to HumanEval.** Fine-tuned open models score high on
    HumanEval but fail LiveCodeBench. Closed models maintain consistent
    performance across both.
 
 8. **Holistic capability gaps exist.** Model rankings shift across code
-   generation, self-repair, execution, and test output prediction — no
-   single model dominates all coding sub-tasks.
+   generation, self-repair, execution, and test output prediction —
+   GPT-4-Turbo and Claude-3-Opus rank at the top across all scenarios,
+   with the lead varying by sub-task.
 
 ### SWE-bench (2,294 real GitHub issues)
 

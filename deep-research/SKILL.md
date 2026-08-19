@@ -14,9 +14,9 @@ Conduct deep research the way frontier agents should: evidence-first, cross-sour
 
 ## The DeepWeb-Bench Findings (Evidence Base)
 
-Across 100 tasks (6,400 cells) evaluated on 9 frontier models:
+Across 100 tasks (6,400 cells per model) evaluated on 9 frontier models (874 of 900 model-task pairs scored):
 
-1. **Retrieval failures account for only 12–14% of errors.** Derivation and Calibration failures exceed 70%.
+1. **Retrieval failures account for only 12–14% of errors** (from a 500-cell human-labeled failure sample). Derivation and Calibration failures exceed 70%.
 2. **Strong and weak models fail differently.** Top models suffer from *incomplete derivation* (31%); weaker models from *hallucinated precision* (38%).
 3. **Models exhibit genuine domain specialization.** Cross-model Spearman ρ = 0.61; per-case disagreement reaches 18.8 percentage points.
 4. **Frontier models score 16–33% on the benchmark.** The best model (Codex CLI + GPT-5.5) reaches 33.37%; there is substantial headroom.
@@ -228,8 +228,8 @@ When conducting deep research, follow this workflow:
 DeepWeb-Bench found that models have genuine domain-specific strengths (ρ = 0.61 cross-model agreement). When researching:
 
 - **Know your domain blind spots.** If you lack familiarity with a domain's disclosure conventions (e.g., how REITs report FFO vs. AFFO, how insurance companies report combined ratios), acknowledge this and search for the relevant accounting or reporting standard first.
-- **Hardest domains** involve reconciliation of non-standardized disclosures (e.g., mortgage REITs scored the lowest cross-model average at 14.67%).
-- **Easiest domains** are those with abundant, uniform primary filings (e.g., luxury goods at 83.07%).
+- **Hardest domains** involve reconciliation of non-standardized disclosures. The lowest single-task cross-model average is mortgage REITs (14.67%); across the six domain categories, Energy & Materials is hardest (24.6%).
+- **Easiest domains** are those with abundant, uniform primary filings. The highest single-task average is luxury goods (83.07%); across categories, Healthcare is easiest (30.7%).
 - **Strategy for unfamiliar domains:** start by understanding the reporting framework, not by searching for individual numbers.
 
 ## When NOT to Use This Skill
